@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { -webkit-font-smoothing:antialiased; }
+    ::-webkit-scrollbar { width:8px; height:8px; }
+    ::-webkit-scrollbar-thumb { background:rgba(128,128,128,0.35); border-radius:8px; }
+    @keyframes fadeInPage { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes popIn { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+    textarea, input, select { font-family: inherit; outline:none; }
+  </style>
+</helmet>
+
+<div style="display:flex;height:100vh;width:100%;background:{{theme.bg}};color:{{theme.text}};font-family:'Manrope',sans-serif;overflow:hidden;">
+
+  <!-- SIDEBAR -->
+  <div style="width:{{sidebarWidth}};flex-shrink:0;background:{{theme.sidebarBg}};border-right:1px solid {{theme.border}};display:flex;flex-direction:column;transition:width 0.2s ease;overflow:hidden;">
+    <div style="display:flex;align-items:center;gap:10px;padding:20px 18px;border-bottom:1px solid {{theme.border}};">
+      <div style="width:30px;height:30px;border-radius:8px;background:{{theme.accent}};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;flex-shrink:0;">D</div>
+      <div style="display:{{labelDisplay}};font-weight:800;font-size:17px;letter-spacing:-0.02em;white-space:nowrap;">DevForge</div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding:16px 12px;">
+      <!-- FAVORITES -->
+      <div style="display:{{labelDisplay}};font-size:11px;font-weight:700;letter-spacing:0.06em;color:{{theme.textMuted}};padding:6px 8px 8px;">SIK KULLANILANLAR</div>
+      <sc-for list="{{favorites}}" as="fav" hint-placeholder-count="3">
+        <div onClick="{{fav.go}}" style="{{fav.style}}">
+          <div style="width:22px;height:22px;border-radius:6px;background:{{fav.badgeBg}};color:{{fav.badgeColor}};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">{{fav.letter}}</div>
+          <div style="display:{{labelDisplay}};font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{fav.label}}</div>
+        </div>
+      </sc-for>
+
+      <div style="height:18px;"></div>
+
+      <!-- JSON & VERI -->
+      <div style="display:{{labelDisplay}};font-size:11px;font-weight:700;letter-spacing:0.06em;color:{{theme.textMuted}};padding:6px 8px 8px;">JSON &amp; VERİ</div>
+      <div onClick="{{goToJson}}" style="{{navStyles.json}}">
+        <div style="width:22px;height:22px;border-radius:6px;background:{{theme.accentSoft}};color:{{theme.accent}};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">{ }</div>
+        <div style="display:{{labelDisplay}};font-size:13.5px;font-weight:600;white-space:nowrap;">JSON Suite</div>
+      </div>
+      <div onClick="{{goToConverters}}" style="{{navStyles.converters}}">
+        <div style="width:22px;height:22px;border-radius:6px;background:{{theme.accentSoft}};color:{{theme.accent}};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">⇄</div>
+        <div style="display:{{labelDisplay}};font-size:13.5px;font-weight:600;white-space:nowrap;">Dönüştürücü</div>
+      </div>
+
+      <div style="height:18px;"></div>
+
+      <!-- STRING & SECURITY -->
+      <div style="display:{{labelDisplay}};font-size:11px;font-weight:700;letter-spacing:0.06em;color:{{theme.textMuted}};padding:6px 8px 8px;">METİN &amp; GÜVENLİK</div>
+      <div onClick="{{goToString}}" style="{{navStyles.string}}">
+        <div style="width:22px;height:22px;border-radius:6px;background:{{theme.accentSoft}};color:{{theme.accent}};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">Aa</div>
+        <div style="display:{{labelDisplay}};font-size:13.5px;font-weight:600;white-space:nowrap;">String &amp; Şifreleme</div>
+      </div>
+      <div onClick="{{goToDiff}}" style="{{navStyles.diff}}">
+        <div style="width:22px;height:22px;border-radius:6px;background:{{theme.accentSoft}};color:{{theme.accent}};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">±</div>
+        <div style="display:{{labelDisplay}};font-size:13.5px;font-weight:600;white-space:nowrap;">Metin Karşılaştırıcı</div>
+      </div>
+
+      <div style="height:18px;"></div>
+
+      <!-- GENERATORS -->
+      <div style="display:{{labelDisplay}};font-size:11px;font-weight:700;letter-spacing:0.06em;color:{{theme.textMuted}};padding:6px 8px 8px;">ÜRETİCİLER</div>
+      <div onClick="{{goToGenerators}}" style="{{navStyles.generators}}">
+        <div style="width:22px;height:22px;border-radius:6px;background:{{theme.accentSoft}};color:{{theme.accent}};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">✧</div>
+        <div style="display:{{labelDisplay}};font-size:13.5px;font-weight:600;white-space:nowrap;">Üreticiler</div>
+      </div>
+    </div>
+
+    <div style="padding:12px;border-top:1px solid {{theme.border}};display:flex;flex-direction:column;gap:6px;">
+      <div onClick="{{toggleTheme}}" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:{{theme.textMuted}};" style-hover="background:{{theme.surfaceAlt}};">
+        <div style="width:22px;height:22px;border-radius:6px;background:{{theme.surfaceAlt}};display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">{{themeIcon}}</div>
+        <div style="display:{{labelDisplay}};font-size:13px;font-weight:600;white-space:nowrap;">{{themeLabel}}</div>
+      </div>
+      <div onClick="{{toggleSidebar}}" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:{{theme.textMuted}};" style-hover="background:{{theme.surfaceAlt}};">
+        <div style="width:22px;height:22px;border-radius:6px;background:{{theme.surfaceAlt}};display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">{{collapseIcon}}</div>
+        <div style="display:{{labelDisplay}};font-size:13px;font-weight:600;white-space:nowrap;">Daralt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN COLUMN -->
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+
+    <!-- HEADER -->
+    <div style="height:60px;flex-shrink:0;border-bottom:1px solid {{theme.border}};display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:16px;position:relative;">
+      <div onClick="{{openPalette}}" style="display:flex;align-items:center;gap:10px;background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:9px;padding:8px 12px;width:340px;max-width:44vw;cursor:pointer;color:{{theme.textMuted}};">
+        <span style="font-size:14px;">⌕</span>
+        <span style="font-size:13.5px;flex:1;">Araç ara...</span>
+        <span style="font-size:11px;font-weight:700;background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:5px;padding:2px 6px;">⌘K</span>
+      </div>
+
+      <div style="position:relative;">
+        <div onClick="{{toggleHistory}}" style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:600;color:{{theme.textMuted}};border:1px solid {{theme.border}};" style-hover="background:{{theme.surfaceAlt}};">
+          <span>🕐</span><span>Geçmiş</span>
+        </div>
+        <sc-if value="{{historyOpen}}" hint-placeholder-val="{{false}}">
+          <div style="position:absolute;top:44px;right:0;width:340px;max-height:420px;overflow-y:auto;background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.16);z-index:40;animation:popIn 0.15s ease;">
+            <div style="padding:12px 14px;font-size:12px;font-weight:700;color:{{theme.textMuted}};border-bottom:1px solid {{theme.border}};">SON 10 İŞLEM</div>
+            <sc-for list="{{history}}" as="h" hint-placeholder-count="6">
+              <div style="padding:10px 14px;border-bottom:1px solid {{theme.border}};cursor:pointer;" style-hover="background:{{theme.surfaceAlt}};">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span style="font-size:12.5px;font-weight:700;color:{{h.color}};">{{h.tool}}</span>
+                  <span style="font-size:11px;color:{{theme.textMuted}};">{{h.time}}</span>
+                </div>
+                <div style="font-size:12px;color:{{theme.textMuted}};margin-top:2px;font-family:'JetBrains Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{h.snippet}}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div key="{{activePage}}" style="flex:1;overflow-y:auto;padding:28px 32px 60px;animation:fadeInPage 0.32s ease;">
+
+      <!-- JSON SUITE -->
+      <sc-if value="{{isJson}}" hint-placeholder-val="{{true}}">
+        <div style="max-width:1280px;margin:0 auto;">
+          <div style="font-size:22px;font-weight:800;letter-spacing:-0.02em;">JSON Suite</div>
+          <div style="font-size:14px;color:{{theme.textMuted}};margin-top:4px;">JSON biçimlendirme, sıkıştırma ve doğrulama</div>
+
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:20px 0;background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:12px;padding:10px 14px;">
+            <span style="font-size:12.5px;font-weight:700;color:{{theme.textMuted}};margin-right:4px;">GİRİNTİ:</span>
+            <button onClick="{{setIndent2}}" style="{{indentBtnStyles.i2}}">2 boşluk</button>
+            <button onClick="{{setIndent4}}" style="{{indentBtnStyles.i4}}">4 boşluk</button>
+            <button onClick="{{setIndentTab}}" style="{{indentBtnStyles.itab}}">Tab</button>
+            <div style="width:1px;height:22px;background:{{theme.border}};margin:0 6px;"></div>
+            <button onClick="{{toggleMinify}}" style="{{toolBtnStyle}}">{{minifyLabel}}</button>
+            <button onClick="{{toggleTreeView}}" style="{{toolBtnStyle}}">{{treeLabel}}</button>
+            <button onClick="{{clearJson}}" style="{{toolBtnStyle}}">Temizle</button>
+            <button onClick="{{copyJsonOutput}}" style="{{toolBtnStylePrimary}}">{{copyJsonLabel}}</button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:480px;">
+              <div style="padding:10px 14px;border-bottom:1px solid {{theme.border}};font-size:12.5px;font-weight:700;color:{{theme.textMuted}};">GİRİŞ</div>
+              <textarea value="{{jsonInput}}" onChange="{{onJsonInputChange}}" spellcheck="false" style="flex:1;border:none;resize:none;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;background:transparent;color:{{theme.text}};"></textarea>
+            </div>
+            <div style="background:{{theme.surface}};border:1px solid {{jsonBorderColor}};border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:480px;">
+              <div style="padding:10px 14px;border-bottom:1px solid {{theme.border}};font-size:12.5px;font-weight:700;color:{{theme.textMuted}};display:flex;justify-content:space-between;">
+                <span>ÇIKTI</span>
+                <span style="color:{{jsonStatusColor}};">{{jsonStatusLabel}}</span>
+              </div>
+              <sc-if value="{{jsonError}}" hint-placeholder-val="{{false}}">
+                <div style="flex:1;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#DC4C4C;">{{jsonError}}</div>
+              </sc-if>
+              <sc-if value="{{showTree}}" hint-placeholder-val="{{false}}">
+                <div style="flex:1;overflow-y:auto;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;">
+                  <sc-for list="{{jsonTreeEntries}}" as="e" hint-placeholder-count="4">
+                    <div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed {{theme.border}};">
+                      <span style="color:{{theme.accent}};font-weight:700;">{{e.key}}</span>
+                      <span style="color:{{theme.textMuted}};">{{e.type}}</span>
+                      <span style="color:{{theme.text}};opacity:0.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{e.preview}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{showPlainOutput}}" hint-placeholder-val="{{true}}">
+                <pre style="flex:1;overflow:auto;margin:0;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;color:{{theme.text}};white-space:pre-wrap;">{{jsonOutput}}</pre>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- CONVERTERS -->
+      <sc-if value="{{isConverters}}" hint-placeholder-val="{{false}}">
+        <div style="max-width:1280px;margin:0 auto;">
+          <div style="font-size:22px;font-weight:800;letter-spacing:-0.02em;">Dönüştürücü</div>
+          <div style="font-size:14px;color:{{theme.textMuted}};margin-top:4px;">JSON, XML, YAML ve CSV arasında anlık dönüşüm</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:480px;">
+              <div style="padding:10px 14px;border-bottom:1px solid {{theme.border}};display:flex;align-items:center;gap:8px;">
+                <span style="font-size:12px;font-weight:700;color:{{theme.textMuted}};">KAYNAK</span>
+                <select value="{{convSource}}" onChange="{{onConvSourceChange}}" style="background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:7px;padding:5px 8px;font-size:12.5px;font-weight:600;color:{{theme.text}};">
+                  <option value="JSON">JSON</option>
+                </select>
+              </div>
+              <textarea value="{{convInput}}" onChange="{{onConvInputChange}}" spellcheck="false" style="flex:1;border:none;resize:none;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;background:transparent;color:{{theme.text}};"></textarea>
+            </div>
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:480px;">
+              <div style="padding:10px 14px;border-bottom:1px solid {{theme.border}};display:flex;align-items:center;gap:8px;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:12px;font-weight:700;color:{{theme.textMuted}};">HEDEF</span>
+                  <select value="{{convTarget}}" onChange="{{onConvTargetChange}}" style="background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:7px;padding:5px 8px;font-size:12.5px;font-weight:600;color:{{theme.text}};">
+                    <option value="YAML">YAML</option>
+                    <option value="XML">XML</option>
+                    <option value="CSV">CSV</option>
+                  </select>
+                </div>
+                <button onClick="{{copyConvOutput}}" style="{{toolBtnStyle}}">{{copyConvLabel}}</button>
+              </div>
+              <pre style="flex:1;overflow:auto;margin:0;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;color:{{theme.text}};white-space:pre-wrap;">{{convOutput}}</pre>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- STRING & CRYPTO -->
+      <sc-if value="{{isString}}" hint-placeholder-val="{{false}}">
+        <div style="max-width:1280px;margin:0 auto;">
+          <div style="font-size:22px;font-weight:800;letter-spacing:-0.02em;">String &amp; Şifreleme</div>
+          <div style="font-size:14px;color:{{theme.textMuted}};margin-top:4px;">Base64, URL kodlama, JWT çözümleme ve hash üretimi</div>
+
+          <div style="margin-top:22px;background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:14px;overflow:hidden;">
+            <div style="padding:14px 18px;border-bottom:1px solid {{theme.border}};font-size:14px;font-weight:700;">JWT Çözücü</div>
+            <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:0;">
+              <div style="padding:16px 18px;border-right:1px solid {{theme.border}};">
+                <textarea value="{{jwtToken}}" onChange="{{onJwtChange}}" spellcheck="false" style="width:100%;height:220px;border:1px solid {{theme.border}};border-radius:9px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;background:{{theme.surfaceAlt}};color:{{theme.text}};resize:none;"></textarea>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;padding:16px 18px;">
+                <div style="background:rgba(147,51,234,0.10);border:1px solid rgba(147,51,234,0.35);border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:11px;font-weight:800;color:#9333EA;letter-spacing:0.05em;">HEADER</div>
+                  <pre style="margin:6px 0 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:{{theme.text}};white-space:pre-wrap;">{{jwtHeader}}</pre>
+                </div>
+                <div style="background:rgba(59,130,246,0.10);border:1px solid rgba(59,130,246,0.35);border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:11px;font-weight:800;color:#3B82F6;letter-spacing:0.05em;">PAYLOAD</div>
+                  <pre style="margin:6px 0 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:{{theme.text}};white-space:pre-wrap;">{{jwtPayload}}</pre>
+                </div>
+                <div style="background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.35);border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:11px;font-weight:800;color:#10B981;letter-spacing:0.05em;">SIGNATURE</div>
+                  <pre style="margin:6px 0 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:{{theme.text}};white-space:pre-wrap;overflow-wrap:anywhere;">{{jwtSignature}}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:14px;padding:16px 18px;">
+              <div style="font-size:13.5px;font-weight:700;margin-bottom:10px;">Base64</div>
+              <textarea value="{{b64Input}}" onChange="{{onB64Change}}" placeholder="Metin girin..." style="width:100%;height:64px;border:1px solid {{theme.border}};border-radius:8px;padding:9px 11px;font-family:'JetBrains Mono',monospace;font-size:12.5px;background:{{theme.surfaceAlt}};color:{{theme.text}};resize:none;margin-bottom:8px;"></textarea>
+              <div style="display:flex;gap:8px;align-items:center;background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:8px;padding:9px 11px;">
+                <div style="flex:1;font-family:'JetBrains Mono',monospace;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{b64Output}}</div>
+                <button onClick="{{copyB64}}" style="{{copyIconStyle}}">{{copyB64Label}}</button>
+              </div>
+            </div>
+
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:14px;padding:16px 18px;">
+              <div style="font-size:13.5px;font-weight:700;margin-bottom:10px;">URL Kodlama</div>
+              <textarea value="{{urlInput}}" onChange="{{onUrlChange}}" placeholder="Metin girin..." style="width:100%;height:64px;border:1px solid {{theme.border}};border-radius:8px;padding:9px 11px;font-family:'JetBrains Mono',monospace;font-size:12.5px;background:{{theme.surfaceAlt}};color:{{theme.text}};resize:none;margin-bottom:8px;"></textarea>
+              <div style="display:flex;gap:8px;align-items:center;background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:8px;padding:9px 11px;">
+                <div style="flex:1;font-family:'JetBrains Mono',monospace;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{urlOutput}}</div>
+                <button onClick="{{copyUrl}}" style="{{copyIconStyle}}">{{copyUrlLabel}}</button>
+              </div>
+            </div>
+
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:14px;padding:16px 18px;grid-column:span 2;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="font-size:13.5px;font-weight:700;">Hash Üretici (SHA-256)</div>
+              </div>
+              <textarea value="{{hashInput}}" onChange="{{onHashChange}}" placeholder="Metin girin..." style="width:100%;height:64px;border:1px solid {{theme.border}};border-radius:8px;padding:9px 11px;font-family:'JetBrains Mono',monospace;font-size:12.5px;background:{{theme.surfaceAlt}};color:{{theme.text}};resize:none;margin-bottom:8px;"></textarea>
+              <div style="display:flex;gap:8px;align-items:center;background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:8px;padding:9px 11px;">
+                <div style="flex:1;font-family:'JetBrains Mono',monospace;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{hashOutput}}</div>
+                <button onClick="{{copyHash}}" style="{{copyIconStyle}}">{{copyHashLabel}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- DIFF -->
+      <sc-if value="{{isDiff}}" hint-placeholder-val="{{false}}">
+        <div style="max-width:1280px;margin:0 auto;">
+          <div style="font-size:22px;font-weight:800;letter-spacing:-0.02em;">Metin Karşılaştırıcı</div>
+          <div style="font-size:14px;color:{{theme.textMuted}};margin-top:4px;">İki metin arasındaki farkları görselleştirin</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:260px;">
+              <div style="padding:10px 14px;border-bottom:1px solid {{theme.border}};font-size:12.5px;font-weight:700;color:{{theme.textMuted}};">ORİJİNAL METİN</div>
+              <textarea value="{{diffOriginal}}" onChange="{{onDiffOriginalChange}}" spellcheck="false" style="flex:1;border:none;resize:none;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;background:transparent;color:{{theme.text}};"></textarea>
+            </div>
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:260px;">
+              <div style="padding:10px 14px;border-bottom:1px solid {{theme.border}};font-size:12.5px;font-weight:700;color:{{theme.textMuted}};">DEĞİŞTİRİLMİŞ METİN</div>
+              <textarea value="{{diffModified}}" onChange="{{onDiffModifiedChange}}" spellcheck="false" style="flex:1;border:none;resize:none;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;background:transparent;color:{{theme.text}};"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:12px;overflow:hidden;">
+            <div style="padding:10px 14px;border-bottom:1px solid {{theme.border}};font-size:12.5px;font-weight:700;color:{{theme.textMuted}};display:flex;gap:16px;">
+              <span>SONUÇ</span>
+              <span style="color:#22A06B;">+{{diffAddedCount}} eklendi</span>
+              <span style="color:#DC4C4C;">-{{diffRemovedCount}} silindi</span>
+            </div>
+            <div style="padding:6px 0;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;max-height:340px;overflow-y:auto;">
+              <sc-for list="{{diffLines}}" as="d" hint-placeholder-count="6">
+                <div style="padding:2px 16px;background:{{d.bg}};color:{{d.color}};white-space:pre-wrap;">{{d.prefix}} {{d.text}}</div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- GENERATORS -->
+      <sc-if value="{{isGenerators}}" hint-placeholder-val="{{false}}">
+        <div style="max-width:1280px;margin:0 auto;">
+          <div style="font-size:22px;font-weight:800;letter-spacing:-0.02em;">Üreticiler</div>
+          <div style="font-size:14px;color:{{theme.textMuted}};margin-top:4px;">UUID, QR Kod ve Lorem Ipsum üretimi</div>
+
+          <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:16px;margin-top:20px;">
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:14px;padding:18px 20px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div style="font-size:14.5px;font-weight:700;">UUID</div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <select value="{{uuidVersion}}" onChange="{{onUuidVersionChange}}" style="background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:7px;padding:5px 8px;font-size:12.5px;font-weight:600;color:{{theme.text}};">
+                    <option value="v4">v4</option>
+                    <option value="v1">v1</option>
+                  </select>
+                  <select value="{{uuidCount}}" onChange="{{onUuidCountChange}}" style="background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:7px;padding:5px 8px;font-size:12.5px;font-weight:600;color:{{theme.text}};">
+                    <option value="3">3 adet</option>
+                    <option value="5">5 adet</option>
+                    <option value="10">10 adet</option>
+                  </select>
+                  <button onClick="{{regenerateUuids}}" style="{{toolBtnStylePrimary}}">Yeniden Üret</button>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;">
+                <sc-for list="{{uuidList}}" as="u" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;justify-content:space-between;background:{{theme.surfaceAlt}};border:1px solid {{theme.border}};border-radius:8px;padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:12.5px;">
+                    <span>{{u}}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <button onClick="{{copyAllUuids}}" style="{{toolBtnStyle}};margin-top:12px;width:100%;">{{copyAllUuidsLabel}}</button>
+            </div>
+
+            <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;">
+              <div style="font-size:14.5px;font-weight:700;margin-bottom:12px;">QR Kod</div>
+              <textarea value="{{qrText}}" onChange="{{onQrChange}}" style="width:100%;height:56px;border:1px solid {{theme.border}};border-radius:8px;padding:9px 11px;font-size:12.5px;font-family:'JetBrains Mono',monospace;background:{{theme.surfaceAlt}};color:{{theme.text}};resize:none;margin-bottom:14px;"></textarea>
+              <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+                <div style="display:grid;grid-template-columns:repeat(17,7px);grid-template-rows:repeat(17,7px);gap:1px;background:#fff;padding:12px;border-radius:8px;border:1px solid {{theme.border}};">
+                  <sc-for list="{{qrCells}}" as="c" hint-placeholder-count="289">
+                    <div style="width:7px;height:7px;background:{{c}};"></div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:14px;">
+                <button style="{{toolBtnStyle}};flex:1;">PNG İndir</button>
+                <button style="{{toolBtnStyle}};flex:1;">SVG İndir</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:14px;padding:18px 20px;margin-top:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <div style="font-size:14.5px;font-weight:700;">Lorem Ipsum</div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:12.5px;color:{{theme.textMuted}};">Paragraf: {{loremCount}}</span>
+                <input type="range" min="1" max="10" value="{{loremCount}}" onChange="{{onLoremChange}}" style="width:160px;"/>
+                <button onClick="{{copyLorem}}" style="{{toolBtnStyle}}">{{copyLoremLabel}}</button>
+              </div>
+            </div>
+            <div style="max-height:220px;overflow-y:auto;font-size:13.5px;line-height:1.7;color:{{theme.text}};display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{loremParagraphs}}" as="p" hint-placeholder-count="2">
+                <div>{{p}}</div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- COMMAND PALETTE -->
+  <sc-if value="{{paletteOpen}}" hint-placeholder-val="{{false}}">
+    <div onClick="{{closePalette}}" style="position:fixed;inset:0;background:rgba(10,12,16,0.45);z-index:80;display:flex;align-items:flex-start;justify-content:center;padding-top:120px;">
+      <div onClick="{{stopProp}}" style="width:560px;max-width:88vw;background:{{theme.surface}};border:1px solid {{theme.border}};border-radius:14px;box-shadow:0 30px 60px rgba(0,0,0,0.35);overflow:hidden;animation:popIn 0.15s ease;">
+        <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid {{theme.border}};">
+          <span style="font-size:15px;color:{{theme.textMuted}};">⌕</span>
+          <input autoFocus="{{true}}" placeholder="Bir araç yazın..." style="flex:1;border:none;background:transparent;font-size:14.5px;color:{{theme.text}};"/>
+        </div>
+        <div style="padding:8px;">
+          <sc-for list="{{paletteItems}}" as="pi" hint-placeholder-count="5">
+            <div onClick="{{pi.go}}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;" style-hover="background:{{theme.surfaceAlt}};">
+              <div style="width:22px;height:22px;border-radius:6px;background:{{theme.accentSoft}};color:{{theme.accent}};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">{{pi.letter}}</div>
+              <span style="font-size:13.5px;font-weight:600;">{{pi.label}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+
+  state = {
+    theme: 'light',
+    sidebarCollapsed: false,
+    activePage: 'json',
+    historyOpen: false,
+    paletteOpen: false,
+
+    jsonInput: JSON.stringify({
+      id: 4821,
+      name: "Ayşe Yılmaz",
+      role: "admin",
+      active: true,
+      tags: ["backend", "devops"],
+      meta: { createdAt: "2026-05-11", lastLogin: null }
+    }, null, 2),
+    jsonIndent: 2,
+    jsonMode: 'pretty',
+    viewMode: 'text',
+    copiedKey: null,
+
+    convSource: 'JSON',
+    convTarget: 'YAML',
+    convInput: JSON.stringify({ name: "DevForge", version: "1.4.0", active: true, tags: ["dev", "tools"] }, null, 2),
+
+    jwtToken: '',
+    b64Input: 'DevForge geliştirici araç kutusu',
+    urlInput: 'https://devforge.io/ara?q=json format&lang=tr',
+    hashInput: 'DevForge',
+    hashOutput: '',
+
+    diffOriginal: "function toplam(a, b) {\n  return a + b;\n}\n\nconst sonuc = toplam(2, 3);\nconsole.log(sonuc);",
+    diffModified: "function toplam(a, b, c = 0) {\n  return a + b + c;\n}\n\nconst sonuc = toplam(2, 3, 4);\nconsole.log('Sonuç:', sonuc);",
+
+    uuidVersion: 'v4',
+    uuidCount: 5,
+    uuidList: [],
+
+    qrText: 'https://devforge.io',
+
+    loremCount: 3,
+    loremParagraphs: []
+  };
+
+  componentDidMount() {
+    const header = { alg: "HS256", typ: "JWT" };
+    const payload = { sub: "1234567890", name: "Ayşe Yılmaz", role: "admin", iat: 1720685000, exp: 1751885000 };
+    const b64url = (obj) => btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const token = b64url(header) + '.' + b64url(payload) + '.' + 'demoSig_9f8a7b6c5d4e3f2a1b';
+    this.setState({ jwtToken: token }, () => this.regenerateUuids());
+    this.regenerateUuids();
+    this.regenerateLorem();
+    this.updateHash();
+  }
+
+  toggleTheme = () => this.setState(s => ({ theme: s.theme === 'light' ? 'dark' : 'light' }));
+  toggleSidebar = () => this.setState(s => ({ sidebarCollapsed: !s.sidebarCollapsed }));
+  toggleHistory = () => this.setState(s => ({ historyOpen: !s.historyOpen }));
+  openPalette = () => this.setState({ paletteOpen: true });
+  closePalette = () => this.setState({ paletteOpen: false });
+  stopProp = (e) => e.stopPropagation();
+
+  goToJson = () => this.setState({ activePage: 'json', historyOpen: false, paletteOpen: false });
+  goToConverters = () => this.setState({ activePage: 'converters', historyOpen: false, paletteOpen: false });
+  goToString = () => this.setState({ activePage: 'string', historyOpen: false, paletteOpen: false });
+  goToDiff = () => this.setState({ activePage: 'diff', historyOpen: false, paletteOpen: false });
+  goToGenerators = () => this.setState({ activePage: 'generators', historyOpen: false, paletteOpen: false });
+
+  copy(key, text) {
+    if (navigator.clipboard && text) navigator.clipboard.writeText(text).catch(() => {});
+    this.setState({ copiedKey: key });
+    clearTimeout(this._copyTimer);
+    this._copyTimer = setTimeout(() => this.setState({ copiedKey: null }), 1400);
+  }
+
+  onJsonInputChange = (e) => this.setState({ jsonInput: e.target.value });
+  setIndent2 = () => this.setState({ jsonIndent: 2 });
+  setIndent4 = () => this.setState({ jsonIndent: 4 });
+  setIndentTab = () => this.setState({ jsonIndent: 'tab' });
+  toggleMinify = () => this.setState(s => ({ jsonMode: s.jsonMode === 'pretty' ? 'minify' : 'pretty' }));
+  toggleTreeView = () => this.setState(s => ({ viewMode: s.viewMode === 'text' ? 'tree' : 'text' }));
+  clearJson = () => this.setState({ jsonInput: '' });
+  copyJsonOutput = () => this.copy('json', this._lastJsonOutput || '');
+
+  onConvSourceChange = (e) => this.setState({ convSource: e.target.value });
+  onConvTargetChange = (e) => this.setState({ convTarget: e.target.value });
+  onConvInputChange = (e) => this.setState({ convInput: e.target.value });
+  copyConvOutput = () => this.copy('conv', this._lastConvOutput || '');
+
+  onJwtChange = (e) => this.setState({ jwtToken: e.target.value });
+  onB64Change = (e) => this.setState({ b64Input: e.target.value });
+  copyB64 = () => this.copy('b64', this._lastB64Output || '');
+  onUrlChange = (e) => this.setState({ urlInput: e.target.value });
+  copyUrl = () => this.copy('url', this._lastUrlOutput || '');
+  onHashChange = (e) => { this.setState({ hashInput: e.target.value }); setTimeout(() => this.updateHash(), 0); };
+  copyHash = () => this.copy('hash', this.state.hashOutput || '');
+
+  async updateHash() {
+    try {
+      const enc = new TextEncoder().encode(this.state.hashInput || '');
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+      this.setState({ hashOutput: hex });
+    } catch (e) { this.setState({ hashOutput: '' }); }
+  }
+
+  onDiffOriginalChange = (e) => this.setState({ diffOriginal: e.target.value });
+  onDiffModifiedChange = (e) => this.setState({ diffModified: e.target.value });
+
+  onUuidVersionChange = (e) => this.setState({ uuidVersion: e.target.value }, () => this.regenerateUuids());
+  onUuidCountChange = (e) => this.setState({ uuidCount: parseInt(e.target.value, 10) }, () => this.regenerateUuids());
+  regenerateUuids = () => {
+    const n = this.state.uuidCount || 5;
+    const list = Array.from({ length: n }, () => crypto.randomUUID());
+    this.setState({ uuidList: list });
+  };
+  copyAllUuids = () => this.copy('uuids', (this.state.uuidList || []).join('\n'));
+
+  onQrChange = (e) => this.setState({ qrText: e.target.value });
+
+  onLoremChange = (e) => { this.setState({ loremCount: parseInt(e.target.value, 10) }, () => this.regenerateLorem()); };
+  regenerateLorem = () => {
+    const words = ["lorem","ipsum","dolor","sit","amet","consectetur","adipiscing","elit","sed","do","eiusmod","tempor","incididunt","ut","labore","et","dolore","magna","aliqua","enim","ad","minim","veniam","quis","nostrud","exercitation","ullamco","laboris","nisi","aliquip","ex","ea","commodo","consequat","duis","aute","irure","in","reprehenderit","voluptate","velit","esse","cillum","fugiat","nulla","pariatur"];
+    const rnd = (seed) => { const x = Math.sin(seed) * 10000; return x - Math.floor(x); };
+    let seed = 42;
+    const paragraphs = [];
+    for (let p = 0; p < (this.state.loremCount || 3); p++) {
+      const sentCount = 3 + Math.floor(rnd(seed++) * 3);
+      let sentences = [];
+      for (let s = 0; s < sentCount; s++) {
+        const wc = 8 + Math.floor(rnd(seed++) * 10);
+        let ws = [];
+        for (let w = 0; w < wc; w++) ws.push(words[Math.floor(rnd(seed++) * words.length)]);
+        let sent = ws.join(' ');
+        sentences.push(sent.charAt(0).toUpperCase() + sent.slice(1) + '.');
+      }
+      paragraphs.push(sentences.join(' '));
+    }
+    this.setState({ loremParagraphs: paragraphs });
+  };
+  copyLorem = () => this.copy('lorem', (this.state.loremParagraphs || []).join('\n\n'));
+
+  jsonToYaml(obj, indent) {
+    const pad = (n) => '  '.repeat(n);
+    const walk = (val, depth) => {
+      if (val === null) return 'null';
+      if (Array.isArray(val)) {
+        if (!val.length) return '[]';
+        return val.map(v => `${pad(depth)}- ${typeof v === 'object' && v !== null ? '\n' + walk(v, depth + 1) : v}`).join('\n');
+      }
+      if (typeof val === 'object') {
+        const keys = Object.keys(val);
+        if (!keys.length) return '{}';
+        return keys.map(k => {
+          const v = val[k];
+          if (v !== null && typeof v === 'object') return `${pad(depth)}${k}:\n${walk(v, depth + 1)}`;
+          return `${pad(depth)}${k}: ${v}`;
+        }).join('\n');
+      }
+      return String(val);
+    };
+    return walk(obj, 0);
+  }
+  jsonToXml(obj, root) {
+    const walk = (val, tag, depth) => {
+      const pad = '  '.repeat(depth);
+      if (val !== null && typeof val === 'object' && !Array.isArray(val)) {
+        const inner = Object.keys(val).map(k => walk(val[k], k, depth + 1)).join('\n');
+        return `${pad}<${tag}>\n${inner}\n${pad}</${tag}>`;
+      }
+      if (Array.isArray(val)) {
+        const inner = val.map(v => walk(v, 'item', depth + 1)).join('\n');
+        return `${pad}<${tag}>\n${inner}\n${pad}</${tag}>`;
+      }
+      return `${pad}<${tag}>${val}</${tag}>`;
+    };
+    return `<?xml version="1.0" encoding="UTF-8"?>\n${walk(obj, root || 'root', 0)}`;
+  }
+  jsonToCsv(obj) {
+    const rows = Array.isArray(obj) ? obj : [obj];
+    if (!rows.length || typeof rows[0] !== 'object') return String(obj);
+    const cols = Object.keys(rows[0]);
+    const lines = [cols.join(',')];
+    rows.forEach(r => lines.push(cols.map(c => JSON.stringify(r[c] ?? '')).join(',')));
+    return lines.join('\n');
+  }
+
+  lcsDiff(aLines, bLines) {
+    const n = aLines.length, m = bLines.length;
+    const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+    for (let i = n - 1; i >= 0; i--) {
+      for (let j = m - 1; j >= 0; j--) {
+        dp[i][j] = aLines[i] === bLines[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      }
+    }
+    const result = [];
+    let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (aLines[i] === bLines[j]) { result.push({ type: 'same', text: aLines[i] }); i++; j++; }
+      else if (dp[i + 1][j] >= dp[i][j + 1]) { result.push({ type: 'removed', text: aLines[i] }); i++; }
+      else { result.push({ type: 'added', text: bLines[j] }); j++; }
+    }
+    while (i < n) { result.push({ type: 'removed', text: aLines[i] }); i++; }
+    while (j < m) { result.push({ type: 'added', text: bLines[j] }); j++; }
+    return result;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const dark = s.theme === 'dark';
+    const theme = dark ? {
+      bg: '#0B0D12', sidebarBg: '#10131A', border: '#1F2430', text: '#E7EAF0', textMuted: '#8B93A7',
+      surface: '#151821', surfaceAlt: '#1B1F29', accent: '#22D3AA', accentSoft: 'rgba(34,211,170,0.14)'
+    } : {
+      bg: '#F7F8FA', sidebarBg: '#FFFFFF', border: '#E5E7EB', text: '#1A1D23', textMuted: '#6B7280',
+      surface: '#FFFFFF', surfaceAlt: '#F3F4F6', accent: '#4F46E5', accentSoft: '#EEF2FF'
+    };
+
+    const sidebarWidth = s.sidebarCollapsed ? '72px' : '240px';
+    const labelDisplay = s.sidebarCollapsed ? 'none' : 'flex';
+
+    const navBase = { display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 8px', borderRadius: '8px', cursor: 'pointer', marginBottom: '2px' };
+    const navStyleFor = (key) => ({
+      ...navBase,
+      background: s.activePage === key ? theme.accentSoft : 'transparent',
+      color: s.activePage === key ? theme.accent : theme.text,
+      fontWeight: s.activePage === key ? 700 : 600
+    });
+    const navStyles = { json: navStyleFor('json'), converters: navStyleFor('converters'), string: navStyleFor('string'), diff: navStyleFor('diff'), generators: navStyleFor('generators') };
+
+    const favDefs = [
+      { page: 'json', letter: '{ }', label: 'JSON Suite' },
+      { page: 'string', letter: 'JWT', label: 'JWT Çözücü' },
+      { page: 'generators', letter: 'ID', label: 'UUID Üret' }
+    ];
+    const goMap = { json: this.goToJson, converters: this.goToConverters, string: this.goToString, diff: this.goToDiff, generators: this.goToGenerators };
+    const favorites = favDefs.map(f => ({
+      letter: f.letter, label: f.label, go: goMap[f.page],
+      badgeBg: theme.accentSoft, badgeColor: theme.accent,
+      style: navStyleFor(f.page)
+    }));
+
+    const historySeed = [
+      { tool: 'JSON Suite', color: theme.accent, time: '2 dk önce', snippet: '{ "id": 4821, "name": "Ayşe" }' },
+      { tool: 'JWT Çözücü', color: '#9333EA', time: '14 dk önce', snippet: 'eyJhbGciOiJIUzI1NiJ9...' },
+      { tool: 'UUID', color: '#10B981', time: '31 dk önce', snippet: '5 adet v4 üretildi' },
+      { tool: 'Dönüştürücü', color: theme.accent, time: '1 sa önce', snippet: 'JSON → YAML' },
+      { tool: 'Hash Üretici', color: '#F59E0B', time: '2 sa önce', snippet: 'SHA-256: 9f3a7c...' },
+      { tool: 'Metin Karşılaştırıcı', color: '#DC4C4C', time: '3 sa önce', snippet: '+4 eklendi, -2 silindi' },
+      { tool: 'Base64', color: theme.accent, time: '5 sa önce', snippet: 'RGV2Rm9yZ2U=' },
+      { tool: 'Lorem Ipsum', color: '#8B93A7', time: 'Dün', snippet: '3 paragraf üretildi' },
+      { tool: 'QR Kod', color: '#10B981', time: 'Dün', snippet: 'https://devforge.io' },
+      { tool: 'URL Kodlama', color: theme.accent, time: '2 gün önce', snippet: 'q%3Djson%20format' }
+    ];
+
+    const paletteItems = [
+      { letter: '{ }', label: 'JSON Suite', go: this.goToJson },
+      { letter: '⇄', label: 'Dönüştürücü', go: this.goToConverters },
+      { letter: 'Aa', label: 'String & Şifreleme', go: this.goToString },
+      { letter: '±', label: 'Metin Karşılaştırıcı', go: this.goToDiff },
+      { letter: '✧', label: 'Üreticiler', go: this.goToGenerators }
+    ];
+
+    // JSON suite computation
+    let jsonOutput = '', jsonError = false, jsonTreeEntries = [], parsed = null;
+    try {
+      parsed = JSON.parse(s.jsonInput || 'null');
+      if (s.jsonMode === 'minify') jsonOutput = JSON.stringify(parsed);
+      else jsonOutput = JSON.stringify(parsed, null, s.jsonIndent === 'tab' ? '\t' : s.jsonIndent);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        jsonTreeEntries = Object.entries(parsed).map(([key, v]) => ({
+          key, type: Array.isArray(v) ? 'array' : typeof v,
+          preview: typeof v === 'object' ? JSON.stringify(v).slice(0, 40) : String(v)
+        }));
+      }
+    } catch (e) {
+      jsonError = s.jsonInput ? 'Geçersiz JSON: ' + e.message : false;
+    }
+    this._lastJsonOutput = jsonOutput;
+
+    // Converters
+    let convOutput = '';
+    try {
+      const obj = JSON.parse(s.convInput || 'null');
+      if (s.convTarget === 'YAML') convOutput = this.jsonToYaml(obj);
+      else if (s.convTarget === 'XML') convOutput = this.jsonToXml(obj, 'root');
+      else convOutput = this.jsonToCsv(obj);
+    } catch (e) { convOutput = '// Geçersiz JSON girişi'; }
+    this._lastConvOutput = convOutput;
+
+    // JWT
+    let jwtHeader = '', jwtPayload = '', jwtSignature = '';
+    try {
+      const parts = (s.jwtToken || '').split('.');
+      const dec = (str) => decodeURIComponent(escape(atob(str.replace(/-/g, '+').replace(/_/g, '/'))));
+      jwtHeader = JSON.stringify(JSON.parse(dec(parts[0])), null, 2);
+      jwtPayload = JSON.stringify(JSON.parse(dec(parts[1])), null, 2);
+      jwtSignature = parts[2] || '';
+    } catch (e) { jwtHeader = '// Geçersiz token'; jwtPayload = ''; jwtSignature = ''; }
+
+    const b64Output = (() => { try { return btoa(unescape(encodeURIComponent(s.b64Input || ''))); } catch (e) { return ''; } })();
+    this._lastB64Output = b64Output;
+    const urlOutput = encodeURIComponent(s.urlInput || '');
+    this._lastUrlOutput = urlOutput;
+
+    // Diff
+    const diffLines = this.lcsDiff((s.diffOriginal || '').split('\n'), (s.diffModified || '').split('\n')).map(l => ({
+      text: l.text,
+      prefix: l.type === 'added' ? '+' : l.type === 'removed' ? '−' : ' ',
+      bg: l.type === 'added' ? 'rgba(34,160,107,0.14)' : l.type === 'removed' ? 'rgba(220,76,76,0.14)' : 'transparent',
+      color: l.type === 'added' ? '#22A06B' : l.type === 'removed' ? '#DC4C4C' : theme.text
+    }));
+    const diffAddedCount = diffLines.filter(l => l.color === '#22A06B').length;
+    const diffRemovedCount = diffLines.filter(l => l.color === '#DC4C4C').length;
+
+    // QR pseudo matrix
+    const seedStr = s.qrText || 'devforge';
+    let h = 0; for (let i = 0; i < seedStr.length; i++) h = (h * 31 + seedStr.charCodeAt(i)) >>> 0;
+    const qrCells = [];
+    for (let idx = 0; idx < 289; idx++) {
+      const row = Math.floor(idx / 17), col = idx % 17;
+      const isFinder = (row < 5 && col < 5) || (row < 5 && col > 11) || (row > 11 && col < 5);
+      let on;
+      if (isFinder) {
+        const rr = row < 5 ? row : row - 12, cc = col < 5 ? col : col > 11 ? col - 12 : col;
+        on = rr === 0 || rr === 4 || cc === 0 || cc === 4 || (rr >= 1 && rr <= 3 && cc >= 1 && cc <= 3);
+      } else {
+        h = (h * 1103515245 + 12345 + idx) >>> 0;
+        on = (h & 1) === 1;
+      }
+      qrCells.push(on ? '#0B0D12' : '#ffffff');
+    }
+
+    const toolBtnStyle = { padding: '7px 12px', fontSize: '12.5px', fontWeight: 600, borderRadius: '7px', border: `1px solid ${theme.border}`, background: theme.surfaceAlt, color: theme.text, cursor: 'pointer' };
+    const toolBtnStylePrimary = { padding: '7px 14px', fontSize: '12.5px', fontWeight: 700, borderRadius: '7px', border: 'none', background: theme.accent, color: '#fff', cursor: 'pointer' };
+    const indentBtnBase = { padding: '6px 11px', fontSize: '12px', fontWeight: 600, borderRadius: '6px', border: `1px solid ${theme.border}`, cursor: 'pointer' };
+    const indentBtnStyle = (val) => ({ ...indentBtnBase, background: s.jsonIndent === val ? theme.accent : theme.surfaceAlt, color: s.jsonIndent === val ? '#fff' : theme.text, borderColor: s.jsonIndent === val ? theme.accent : theme.border });
+    const copyIconStyle = { padding: '5px 10px', fontSize: '11.5px', fontWeight: 700, borderRadius: '6px', border: `1px solid ${theme.border}`, background: theme.surface, color: theme.accent, cursor: 'pointer', flexShrink: 0 };
+
+    return {
+      theme, sidebarWidth, labelDisplay, navStyles, favorites, history: historySeed, paletteItems,
+      themeIcon: dark ? '☀' : '☾', themeLabel: dark ? 'Aydınlık Mod' : 'Karanlık Mod',
+      collapseIcon: s.sidebarCollapsed ? '»' : '«',
+      toggleTheme: this.toggleTheme, toggleSidebar: this.toggleSidebar,
+      toggleHistory: this.toggleHistory, historyOpen: s.historyOpen,
+      openPalette: this.openPalette, closePalette: this.closePalette, paletteOpen: s.paletteOpen, stopProp: this.stopProp,
+      activePage: s.activePage,
+      isJson: s.activePage === 'json', isConverters: s.activePage === 'converters', isString: s.activePage === 'string',
+      isDiff: s.activePage === 'diff', isGenerators: s.activePage === 'generators',
+      goToJson: this.goToJson, goToConverters: this.goToConverters, goToString: this.goToString, goToDiff: this.goToDiff, goToGenerators: this.goToGenerators,
+
+      jsonInput: s.jsonInput, onJsonInputChange: this.onJsonInputChange,
+      setIndent2: this.setIndent2, setIndent4: this.setIndent4, setIndentTab: this.setIndentTab,
+      indentBtnStyles: { i2: indentBtnStyle(2), i4: indentBtnStyle(4), itab: indentBtnStyle('tab') },
+      toggleMinify: this.toggleMinify, minifyLabel: s.jsonMode === 'minify' ? 'Biçimlendir' : 'Sıkıştır',
+      toggleTreeView: this.toggleTreeView, treeLabel: s.viewMode === 'tree' ? 'Metin Görünümü' : 'Ağaç Görünümü',
+      clearJson: this.clearJson, copyJsonOutput: this.copyJsonOutput, copyJsonLabel: s.copiedKey === 'json' ? 'Kopyalandı ✓' : 'Panoya Kopyala',
+      jsonOutput, jsonError, jsonTreeEntries,
+      showTree: s.viewMode === 'tree' && !jsonError, showPlainOutput: s.viewMode !== 'tree' && !jsonError,
+      jsonStatusLabel: jsonError ? 'Hatalı' : 'Geçerli', jsonStatusColor: jsonError ? '#DC4C4C' : '#22A06B',
+      jsonBorderColor: jsonError ? '#DC4C4C55' : theme.border,
+      toolBtnStyle, toolBtnStylePrimary, copyIconStyle,
+
+      convSource: s.convSource, convTarget: s.convTarget, convInput: s.convInput, convOutput,
+      onConvSourceChange: this.onConvSourceChange, onConvTargetChange: this.onConvTargetChange, onConvInputChange: this.onConvInputChange,
+      copyConvOutput: this.copyConvOutput, copyConvLabel: s.copiedKey === 'conv' ? 'Kopyalandı ✓' : 'Kopyala',
+
+      jwtToken: s.jwtToken, onJwtChange: this.onJwtChange, jwtHeader, jwtPayload, jwtSignature,
+      b64Input: s.b64Input, onB64Change: this.onB64Change, b64Output, copyB64: this.copyB64, copyB64Label: s.copiedKey === 'b64' ? '✓' : 'Kopyala',
+      urlInput: s.urlInput, onUrlChange: this.onUrlChange, urlOutput, copyUrl: this.copyUrl, copyUrlLabel: s.copiedKey === 'url' ? '✓' : 'Kopyala',
+      hashInput: s.hashInput, onHashChange: this.onHashChange, hashOutput: s.hashOutput, copyHash: this.copyHash, copyHashLabel: s.copiedKey === 'hash' ? '✓' : 'Kopyala',
+
+      diffOriginal: s.diffOriginal, diffModified: s.diffModified, onDiffOriginalChange: this.onDiffOriginalChange, onDiffModifiedChange: this.onDiffModifiedChange,
+      diffLines, diffAddedCount, diffRemovedCount,
+
+      uuidVersion: s.uuidVersion, uuidCount: s.uuidCount, uuidList: s.uuidList,
+      onUuidVersionChange: this.onUuidVersionChange, onUuidCountChange: this.onUuidCountChange,
+      regenerateUuids: this.regenerateUuids, copyAllUuids: this.copyAllUuids, copyAllUuidsLabel: s.copiedKey === 'uuids' ? 'Kopyalandı ✓' : 'Tümünü Kopyala',
+
+      qrText: s.qrText, onQrChange: this.onQrChange, qrCells,
+
+      loremCount: s.loremCount, onLoremChange: this.onLoremChange, loremParagraphs: s.loremParagraphs,
+      copyLorem: this.copyLorem, copyLoremLabel: s.copiedKey === 'lorem' ? 'Kopyalandı ✓' : 'Kopyala'
+    };
+  }
+}
+
+</script>
+</body>
+</html>
