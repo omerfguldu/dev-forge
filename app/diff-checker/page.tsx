@@ -1,5 +1,5 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import { DiffCheckerTool } from "@/components/tools/DiffCheckerTool";
 
 export const metadata: Metadata = {
   title: "Metin Karşılaştırıcı",
@@ -9,21 +9,8 @@ export const metadata: Metadata = {
 
 export default function DiffCheckerPage() {
   return (
-    <main className="flex flex-1 flex-col px-6 py-16">
-      <div className="mx-auto w-full max-w-3xl">
-        <h1 className="text-2xl font-extrabold tracking-tight">
-          Metin Karşılaştırıcı
-        </h1>
-        <p className="mt-2 text-muted-foreground">
-          Diff görüntüleme aracı yakında burada olacak.
-        </p>
-        <Link
-          href="/"
-          className="mt-6 inline-block text-sm font-semibold text-primary hover:underline"
-        >
-          ← Ana sayfaya dön
-        </Link>
-      </div>
+    <main>
+      <DiffCheckerTool />
     </main>
   );
 }
