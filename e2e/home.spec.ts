@@ -7,7 +7,9 @@ test("home page lists all tool groups and links to them", async ({ page }) => {
     page.getByRole("heading", { name: "DevForge", level: 1 }),
   ).toBeVisible();
 
-  const jsonSuiteLink = page.getByRole("link", { name: /JSON Suite/ });
+  const jsonSuiteLink = page
+    .getByRole("main")
+    .getByRole("link", { name: /JSON Suite/ });
   await expect(jsonSuiteLink).toBeVisible();
 
   await jsonSuiteLink.click();

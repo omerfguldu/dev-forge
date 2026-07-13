@@ -17,5 +17,5 @@
   "env": {
     "builtin": true
   },
-  "ignorePatterns": ["context/**"]
+  "ignorePatterns": ["context/**", "components/ui/**"]
 }

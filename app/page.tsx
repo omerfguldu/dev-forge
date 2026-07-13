@@ -1,37 +1,5 @@
 import Link from "next/link";
-
-const toolGroups = [
-  {
-    href: "/json-formatter",
-    badge: "{ }",
-    label: "JSON Suite",
-    description: "Formatlayıcı, minifier ve doğrulayıcı",
-  },
-  {
-    href: "/converters",
-    badge: "⇄",
-    label: "Dönüştürücü",
-    description: "JSON, YAML, XML ve CSV dönüşümleri",
-  },
-  {
-    href: "/string-crypto",
-    badge: "Aa",
-    label: "String & Şifreleme",
-    description: "Base64, URL kodlama ve JWT çözümleyici",
-  },
-  {
-    href: "/diff-checker",
-    badge: "±",
-    label: "Metin Karşılaştırıcı",
-    description: "İki metin arasındaki farkları görselleştirir",
-  },
-  {
-    href: "/generators",
-    badge: "✧",
-    label: "Üreticiler",
-    description: "UUID, hash, QR kod ve Lorem Ipsum",
-  },
-];
+import { tools } from "@/lib/tools";
 
 export default function Home() {
   return (
@@ -44,7 +12,7 @@ export default function Home() {
         </p>
 
         <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {toolGroups.map((tool) => (
+          {tools.map((tool) => (
             <Link
               key={tool.href}
               href={tool.href}
