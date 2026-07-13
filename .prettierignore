@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+coverage
+playwright-report
+test-results
+
+# not app source — reference docs, prototypes, and agent skill packs
+context/
+.agents/
+skills-lock.json
+test-preferences.json
