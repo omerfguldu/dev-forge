@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@/components/Analytics";
 import { AppShell } from "@/components/AppShell";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SITE_URL } from "@/lib/site";
 import "../styles/globals.css";
 
 const manrope = Manrope({
@@ -16,6 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "DevForge — Developer Utility Suite",
     template: "%s · DevForge",
@@ -49,6 +52,7 @@ export default function RootLayout({
           <AppShell>{children}</AppShell>
         </ThemeProvider>
         <ServiceWorkerRegistration />
+        <Analytics />
       </body>
     </html>
   );

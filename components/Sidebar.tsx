@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { incrementUsage, topFavorites, type ToolUsage } from "@/lib/favorites";
+import { GITHUB_REPO_URL } from "@/lib/site";
 import { toolGroups, tools, type Tool } from "@/lib/tools";
 import { cn } from "@/lib/utils";
 
@@ -166,6 +167,24 @@ export function Sidebar() {
             Daralt
           </span>
         </button>
+        <a
+          href={GITHUB_REPO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2.5 rounded-lg px-2.5 py-2.5 text-muted-foreground hover:bg-sidebar-accent/60"
+        >
+          <span className="flex size-[22px] shrink-0 items-center justify-center rounded-md bg-muted text-xs">
+            ⭐
+          </span>
+          <span
+            className={cn(
+              "whitespace-nowrap text-[13px] font-semibold",
+              collapsed && "hidden",
+            )}
+          >
+            GitHub&apos;da Yıldızla
+          </span>
+        </a>
       </div>
     </aside>
   );
