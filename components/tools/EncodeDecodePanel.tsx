@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useHistory } from "@/hooks/useHistory";
 import { cn } from "@/lib/utils";
 import type { ValidationResult } from "@/lib/validation";
 
@@ -39,6 +40,7 @@ export function EncodeDecodePanel({
   const [encoding, setEncoding] = useState(true);
   const [input, setInput] = useState(sample);
   const { copied, copy } = useCopyToClipboard();
+  const { addEntry } = useHistory();
 
   const result = useMemo(
     () => (encoding ? encode(input) : decode(input)),
@@ -104,7 +106,11 @@ export function EncodeDecodePanel({
             <Button
               size="xs"
               disabled={!result.isValid}
-              onClick={() => result.data && copy(result.data)}
+              onClick={() => {
+                if (!result.data) return;
+                copy(result.data);
+                addEntry(title, result.data);
+              }}
             >
               {copied ? "Kopyalandı! ✓" : "Kopyala"}
             </Button>

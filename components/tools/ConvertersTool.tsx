@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useHistory } from "@/hooks/useHistory";
 import {
   csvToJson,
   jsonToCsv,
@@ -62,6 +63,7 @@ export function ConvertersTool() {
   const [jsonIsSource, setJsonIsSource] = useState(true);
   const [input, setInput] = useState(SAMPLES.json);
   const { copied, copy } = useCopyToClipboard();
+  const { addEntry } = useHistory();
 
   const sourceLanguage = jsonIsSource ? "json" : otherFormat;
   const targetLanguage = jsonIsSource ? otherFormat : "json";
@@ -162,7 +164,11 @@ export function ConvertersTool() {
             <Button
               size="sm"
               disabled={!result.isValid}
-              onClick={() => result.data && copy(result.data)}
+              onClick={() => {
+                if (!result.data) return;
+                copy(result.data);
+                addEntry("Dönüştürücü", result.data);
+              }}
             >
               {copied ? "Kopyalandı! ✓" : "Kopyala"}
             </Button>

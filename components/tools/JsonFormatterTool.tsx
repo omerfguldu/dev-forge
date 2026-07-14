@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useHistory } from "@/hooks/useHistory";
 import {
   buildJsonTree,
   formatJson,
@@ -35,6 +36,7 @@ export function JsonFormatterTool() {
   const [minify, setMinify] = useState(false);
   const [treeView, setTreeView] = useState(false);
   const { copied, copy } = useCopyToClipboard();
+  const { addEntry } = useHistory();
 
   const validation = useMemo(() => validateJson(input), [input]);
 
@@ -106,7 +108,11 @@ export function JsonFormatterTool() {
           size="sm"
           className="ml-auto"
           disabled={!formatted?.isValid}
-          onClick={() => formatted?.data && copy(formatted.data)}
+          onClick={() => {
+            if (!formatted?.data) return;
+            copy(formatted.data);
+            addEntry("JSON Suite", formatted.data);
+          }}
         >
           {copied ? "Kopyalandı! ✓" : "Kopyala"}
         </Button>

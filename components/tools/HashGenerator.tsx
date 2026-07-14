@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useHistory } from "@/hooks/useHistory";
 import { computeHash, HASH_ALGORITHMS, type HashAlgorithm } from "@/lib/hash";
 
 const CodeEditor = dynamic(
@@ -25,6 +26,7 @@ export function HashGenerator() {
   const [input, setInput] = useState("DevForge");
   const [algorithm, setAlgorithm] = useState<HashAlgorithm>("SHA-256");
   const { copied, copy } = useCopyToClipboard();
+  const { addEntry } = useHistory();
 
   const hash = useMemo(() => computeHash(input, algorithm), [input, algorithm]);
 
@@ -62,7 +64,13 @@ export function HashGenerator() {
         <span className="flex-1 overflow-hidden font-mono text-[12.5px] text-ellipsis whitespace-nowrap">
           {hash}
         </span>
-        <Button size="xs" onClick={() => copy(hash)}>
+        <Button
+          size="xs"
+          onClick={() => {
+            copy(hash);
+            addEntry("Hash Üretici", hash);
+          }}
+        >
           {copied ? "Kopyalandı! ✓" : "Kopyala"}
         </Button>
       </div>

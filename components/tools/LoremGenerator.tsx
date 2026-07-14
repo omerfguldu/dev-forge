@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useHistory } from "@/hooks/useHistory";
 import { generateLorem, type LoremMode } from "@/lib/lorem";
 
 const MODE_LABELS: Record<LoremMode, string> = {
@@ -21,6 +22,7 @@ export function LoremGenerator() {
   // so start empty and fill in after mount.
   const [items, setItems] = useState<string[]>([]);
   const { copied, copy } = useCopyToClipboard();
+  const { addEntry } = useHistory();
 
   useEffect(() => {
     setItems(generateLorem("paragraph", 3));
@@ -97,7 +99,11 @@ export function LoremGenerator() {
         size="sm"
         variant="outline"
         className="mt-3 w-full"
-        onClick={() => copy(items.join("\n\n"))}
+        onClick={() => {
+          const joined = items.join("\n\n");
+          copy(joined);
+          addEntry("Lorem Ipsum", joined);
+        }}
       >
         {copied ? "Kopyalandı! ✓" : "Kopyala"}
       </Button>

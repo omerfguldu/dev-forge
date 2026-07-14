@@ -5,13 +5,53 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { toolGroups } from "@/lib/tools";
+import { incrementUsage, topFavorites, type ToolUsage } from "@/lib/favorites";
+import { toolGroups, tools, type Tool } from "@/lib/tools";
 import { cn } from "@/lib/utils";
+
+function NavLink({
+  tool,
+  isActive,
+  collapsed,
+}: {
+  tool: Tool;
+  isActive: boolean;
+  collapsed: boolean;
+}) {
+  return (
+    <Link
+      href={tool.href}
+      className={cn(
+        "mb-0.5 flex items-center gap-2.5 rounded-lg px-2 py-2.5 text-[13.5px] font-semibold transition-colors",
+        isActive
+          ? "bg-accent font-bold text-accent-foreground"
+          : "text-sidebar-foreground hover:bg-sidebar-accent/60",
+      )}
+    >
+      <span className="flex size-[22px] shrink-0 items-center justify-center rounded-md bg-accent text-[11px] font-bold text-accent-foreground">
+        {tool.badge}
+      </span>
+      <span className={cn("truncate whitespace-nowrap", collapsed && "hidden")}>
+        {tool.label}
+      </span>
+    </Link>
+  );
+}
 
 export function Sidebar() {
   const pathname = usePathname();
   const { resolvedTheme, setTheme } = useTheme();
   const [collapsed, setCollapsed] = useLocalStorage("sidebar-collapsed", false);
+  const [usage, setUsage] = useLocalStorage<ToolUsage>(
+    "devforge-tool-usage",
+    {},
+  );
+
+  useEffect(() => {
+    if (tools.some((tool) => tool.href === pathname)) {
+      setUsage((previous) => incrementUsage(previous, pathname));
+    }
+  }, [pathname, setUsage]);
 
   // Server render and the pre-hydration client render can't know the
   // persisted theme yet, so both assume the app's `defaultTheme` ("dark")
@@ -19,6 +59,8 @@ export function Sidebar() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const isDark = mounted ? resolvedTheme === "dark" : true;
+
+  const favorites = topFavorites(usage, tools, 3);
 
   return (
     <aside
@@ -42,6 +84,27 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4">
+        {favorites.length > 0 && (
+          <div className="mb-4.5">
+            <div
+              className={cn(
+                "px-2 pb-2 text-[11px] font-bold tracking-wider text-muted-foreground",
+                collapsed && "hidden",
+              )}
+            >
+              SIK KULLANILANLAR
+            </div>
+            {favorites.map((tool) => (
+              <NavLink
+                key={tool.href}
+                tool={tool}
+                isActive={pathname === tool.href}
+                collapsed={collapsed}
+              />
+            ))}
+          </div>
+        )}
+
         {toolGroups.map((group) => (
           <div key={group.title} className="mb-4.5 last:mb-0">
             <div
@@ -52,33 +115,14 @@ export function Sidebar() {
             >
               {group.title}
             </div>
-            {group.items.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "mb-0.5 flex items-center gap-2.5 rounded-lg px-2 py-2.5 text-[13.5px] font-semibold transition-colors",
-                    isActive
-                      ? "bg-accent font-bold text-accent-foreground"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent/60",
-                  )}
-                >
-                  <span className="flex size-[22px] shrink-0 items-center justify-center rounded-md bg-accent text-[11px] font-bold text-accent-foreground">
-                    {item.badge}
-                  </span>
-                  <span
-                    className={cn(
-                      "truncate whitespace-nowrap",
-                      collapsed && "hidden",
-                    )}
-                  >
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
+            {group.items.map((tool) => (
+              <NavLink
+                key={tool.href}
+                tool={tool}
+                isActive={pathname === tool.href}
+                collapsed={collapsed}
+              />
+            ))}
           </div>
         ))}
       </nav>

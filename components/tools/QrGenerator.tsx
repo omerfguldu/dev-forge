@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
+import { useHistory } from "@/hooks/useHistory";
 import { generateQrPngDataUrl, generateQrSvg } from "@/lib/qr";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +20,7 @@ export function QrGenerator() {
   const [svg, setSvg] = useState("");
   const [pngUrl, setPngUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { addEntry } = useHistory();
 
   useEffect(() => {
     let cancelled = false;
@@ -86,6 +88,7 @@ export function QrGenerator() {
               href={pngUrl || undefined}
               download="devforge-qr.png"
               aria-disabled={!pngUrl}
+              onClick={() => pngUrl && addEntry("QR Kod", text)}
               className={cn(
                 buttonVariants({ variant: "outline", size: "sm" }),
                 "flex-1",
@@ -98,6 +101,7 @@ export function QrGenerator() {
               href={svgDataUrl || undefined}
               download="devforge-qr.svg"
               aria-disabled={!svg}
+              onClick={() => svg && addEntry("QR Kod", text)}
               className={cn(
                 buttonVariants({ variant: "outline", size: "sm" }),
                 "flex-1",

@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useHistory } from "@/hooks/useHistory";
 import { generateUuids } from "@/lib/uuid";
 
 const COUNT_OPTIONS = [3, 5, 10] as const;
@@ -38,6 +39,7 @@ export function UuidGenerator() {
   // and client HTML would never match — start empty and fill in on mount.
   const [uuids, setUuids] = useState<string[]>([]);
   const { copied, copy } = useCopyToClipboard();
+  const { addEntry } = useHistory();
 
   useEffect(() => {
     setUuids(generateUuids(5));
@@ -87,7 +89,11 @@ export function UuidGenerator() {
         size="sm"
         variant="outline"
         className="mt-3 w-full"
-        onClick={() => copy(uuids.join("\n"))}
+        onClick={() => {
+          const joined = uuids.join("\n");
+          copy(joined);
+          addEntry("UUID", joined);
+        }}
       >
         {copied ? "Kopyalandı! ✓" : "Tümünü Kopyala"}
       </Button>
