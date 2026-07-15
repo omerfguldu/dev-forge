@@ -19,7 +19,7 @@ const trMessages = {
   "sidebar.favorites": "SIK KULLANILANLAR",
   "sidebar.open_source": "Açık Kaynak",
   "sidebar.github_star": "GitHub'da Yıldızla",
-  "sidebar.support_title": "DevStack'i Beğendiniz mi?",
+  "sidebar.support_title": "FnStack'i Beğendiniz mi?",
   "sidebar.support_desc":
     "Bize GitHub'da yıldız vererek projenin büyümesine katkıda bulunabilirsiniz.",
   "sidebar.theme_light": "Aydınlık",
@@ -40,7 +40,7 @@ const trMessages = {
   "header.no_actions": "Henüz işlem yok.",
 
   // Home Page
-  "home.title": "DevStack",
+  "home.title": "FnStack",
   "home.subtitle":
     "Geliştirici araçlarını tek, hızlı ve tamamen istemci taraflı bir arayüzde toplayan yardımcı araç seti.",
 
@@ -67,7 +67,7 @@ const enMessages = {
   "sidebar.favorites": "FAVORITES",
   "sidebar.open_source": "Open Source",
   "sidebar.github_star": "Star on GitHub",
-  "sidebar.support_title": "Do you like DevStack?",
+  "sidebar.support_title": "Do you like FnStack?",
   "sidebar.support_desc":
     "You can support our growth by starring the project on GitHub.",
   "sidebar.theme_light": "Light",
@@ -88,7 +88,7 @@ const enMessages = {
   "header.no_actions": "No actions yet.",
 
   // Home Page
-  "home.title": "DevStack",
+  "home.title": "FnStack",
   "home.subtitle":
     "A developer utility suite combining tools in a single, fast, client-side interface.",
 
@@ -125,7 +125,7 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useLocalStorage("devstack-locale", "");
+  const [locale, setLocale] = useLocalStorage("fnstack-locale", "");
   const [activeLocale, setActiveLocale] = useState("tr");
   const [mounted, setMounted] = useState(false);
 

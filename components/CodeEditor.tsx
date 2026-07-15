@@ -11,7 +11,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useRef } from "react";
 
 // Bundle Monaco locally instead of letting @monaco-editor/react fetch it
-// from a CDN at runtime — DevForge processes everything client-side and
+// from a CDN at runtime — FnStack processes everything client-side and
 // shouldn't depend on a third-party host to load its editor.
 loader.config({ monaco: monacoEditor });
 
@@ -81,7 +81,7 @@ export function CodeEditor({
 
     monaco.editor.setModelMarkers(
       model,
-      "devstack",
+      "fnstack",
       markers.map((marker) => ({
         ...marker,
         severity: monaco.MarkerSeverity.Error,

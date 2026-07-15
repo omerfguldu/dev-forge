@@ -4,7 +4,7 @@ test("home page lists all tool groups and links to them", async ({ page }) => {
   await page.goto("/");
 
   await expect(
-    page.getByRole("heading", { name: "DevStack", level: 1 }),
+    page.getByRole("heading", { name: "FnStack", level: 1 }),
   ).toBeVisible();
 
   const jsonSuiteLink = page

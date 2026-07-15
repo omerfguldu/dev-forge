@@ -16,7 +16,7 @@ const CodeEditor = dynamic(
 );
 
 export function QrGenerator() {
-  const [text, setText] = useState("https://devforge.dev");
+  const [text, setText] = useState("https://fnstack.vercel.app");
   const [svg, setSvg] = useState("");
   const [pngUrl, setPngUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +86,7 @@ export function QrGenerator() {
           <div className="flex w-full gap-2">
             <a
               href={pngUrl || undefined}
-              download="devforge-qr.png"
+              download="fnstack-qr.png"
               aria-disabled={!pngUrl}
               onClick={() => pngUrl && addEntry("QR Kod", text)}
               className={cn(
@@ -99,7 +99,7 @@ export function QrGenerator() {
             </a>
             <a
               href={svgDataUrl || undefined}
-              download="devforge-qr.svg"
+              download="fnstack-qr.svg"
               aria-disabled={!svg}
               onClick={() => svg && addEntry("QR Kod", text)}
               className={cn(

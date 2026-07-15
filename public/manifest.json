@@ -1,6 +1,6 @@
 {
-  "name": "DevStack — Developer Utility Suite",
-  "short_name": "DevStack",
+  "name": "FnStack — Developer Utility Suite",
+  "short_name": "FnStack",
   "description": "JSON formatlama, kod dönüştürme, metin şifreleme ve veri üretimi gibi geliştirici araçlarını tek bir hızlı ve güvenli arayüzde toplayan, tamamen istemci taraflı çalışan araç seti.",
   "start_url": "/",
   "display": "standalone",

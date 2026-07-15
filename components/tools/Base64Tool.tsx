@@ -10,7 +10,7 @@ export function Base64Tool() {
       description="Metni Base64'e kodlayın veya Base64'ten çözün"
       encode={encodeBase64}
       decode={decodeBase64}
-      sample="DevForge geliştirici araç seti"
+      sample="FnStack geliştirici araç seti"
       ariaLabelPrefix="Base64"
     />
   );

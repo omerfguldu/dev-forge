@@ -23,7 +23,7 @@ const CodeEditor = dynamic(
 );
 
 export function HashGenerator() {
-  const [input, setInput] = useState("DevForge");
+  const [input, setInput] = useState("FnStack");
   const [algorithm, setAlgorithm] = useState<HashAlgorithm>("SHA-256");
   const { copied, copy } = useCopyToClipboard();
   const { addEntry } = useHistory();

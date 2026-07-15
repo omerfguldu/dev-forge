@@ -7,10 +7,10 @@ describe("encodeBase64", () => {
   });
 
   it("encodes UTF-8 text with multi-byte characters", () => {
-    const result = encodeBase64("DevForge çalışıyor 🚀");
+    const result = encodeBase64("FnStack çalışıyor 🚀");
     expect(result.isValid).toBe(true);
     expect(decodeBase64(result.data as string).data).toBe(
-      "DevForge çalışıyor 🚀",
+      "FnStack çalışıyor 🚀",
     );
   });
 

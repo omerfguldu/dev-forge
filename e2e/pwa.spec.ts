@@ -5,7 +5,7 @@ test("serves a valid web app manifest", async ({ request }) => {
   expect(response.ok()).toBe(true);
 
   const manifest = await response.json();
-  expect(manifest.name).toContain("DevStack");
+  expect(manifest.name).toContain("FnStack");
   expect(manifest.display).toBe("standalone");
   expect(manifest.icons.length).toBeGreaterThan(0);
 });

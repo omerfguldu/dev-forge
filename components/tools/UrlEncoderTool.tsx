@@ -10,7 +10,7 @@ export function UrlEncoderTool() {
       description="Metni URL için kodlayın veya çözün"
       encode={encodeUrlText}
       decode={decodeUrlText}
-      sample="https://devforge.dev/search?q=merhaba dünya"
+      sample="https://fnstack.vercel.app/search?q=merhaba dünya"
       ariaLabelPrefix="URL kodlama"
     />
   );

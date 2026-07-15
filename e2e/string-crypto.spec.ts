@@ -35,7 +35,7 @@ test("Base64 tool encodes by default and decodes back after switching mode", asy
     has: page.locator('[aria-label="Base64 çıktısı"]'),
   });
   await expect(output.locator(".view-lines")).toContainText(
-    "RGV2Rm9yZ2U", // base64 for "DevForge..." sample prefix
+    "Rm5TdGFjaw", // base64 for "FnStack..." sample prefix
   );
 
   // Base64Tool renders before UrlEncoderTool, so its "Çöz" button is first.

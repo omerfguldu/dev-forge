@@ -150,7 +150,7 @@ export function Sidebar() {
   const { resolvedTheme, setTheme } = useTheme();
   const [collapsed, setCollapsed] = useLocalStorage("sidebar-collapsed", false);
   const [usage, setUsage] = useLocalStorage<ToolUsage>(
-    "devstack-tool-usage",
+    "fnstack-tool-usage",
     {},
   );
   const { i18n } = useLingui();
@@ -222,7 +222,7 @@ export function Sidebar() {
               </svg>
             </div>
             <span className="flex-1 whitespace-nowrap text-[17px] font-extrabold tracking-tight">
-              DevStack
+              FnStack
             </span>
             <button
               type="button"

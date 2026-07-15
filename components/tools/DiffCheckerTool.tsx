@@ -13,9 +13,9 @@ const CodeEditor = dynamic(
 );
 
 const SAMPLE_ORIGINAL =
-  "DevForge geliştirici araçları\nJSON, YAML, XML, CSV\nBase64 ve URL kodlama";
+  "FnStack geliştirici araçları\nJSON, YAML, XML, CSV\nBase64 ve URL kodlama";
 const SAMPLE_MODIFIED =
-  "DevForge geliştirici araç seti\nJSON, YAML, XML, CSV\nBase64, URL ve JWT araçları";
+  "FnStack Geliştirici araç seti\nJSON, YAML, XML, CSV\nBase64, URL ve JWT araçları";
 
 const LINE_STYLES: Record<
   DiffLine["type"],

@@ -21,14 +21,29 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "DevStack — Developer Utility Suite",
-    template: "%s · DevStack",
+    default: "FnStack — Developer Utility Suite",
+    template: "%s · FnStack",
   },
   description:
     "JSON formatlama, kod dönüştürme, metin şifreleme ve veri üretimi gibi geliştirici araçlarını tek bir hızlı ve güvenli arayüzde toplayan, tamamen istemci taraflı çalışan araç seti.",
   manifest: "/manifest.json",
   verification: {
     google: "Ch7amv6GZ3vGgshGxSsQiQCpMx5iqJ0VxXOa30TSTHk",
+  },
+  openGraph: {
+    title: "FnStack — Developer Utility Suite",
+    description:
+      "JSON formatlama, kod dönüştürme, metin şifreleme ve veri üretimi gibi geliştirici araçlarını tek bir hızlı ve güvenli arayüzde toplayan, tamamen istemci taraflı çalışan araç seti.",
+    url: SITE_URL,
+    siteName: "FnStack",
+    locale: "tr_TR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FnStack — Developer Utility Suite",
+    description:
+      "JSON formatlama, kod dönüştürme, metin şifreleme ve veri üretimi gibi geliştirici araçlarını tek bir hızlı ve güvenli arayüzde toplayan, tamamen istemci taraflı çalışan araç seti.",
   },
 };
 

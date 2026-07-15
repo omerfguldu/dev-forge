@@ -52,10 +52,10 @@ const CONVERTERS: Record<
 };
 
 const SAMPLES: Record<"json" | OtherFormat, string> = {
-  json: '{\n  "name": "DevForge",\n  "version": "0.1.0"\n}',
-  yaml: "name: DevForge\nversion: 0.1.0\n",
-  xml: "<root>\n  <name>DevForge</name>\n  <version>0.1.0</version>\n</root>",
-  csv: "name,version\nDevForge,0.1.0",
+  json: '{\n  "name": "FnStack",\n  "version": "0.1.0"\n}',
+  yaml: "name: FnStack\nversion: 0.1.0\n",
+  xml: "<root>\n  <name>FnStack</name>\n  <version>0.1.0</version>\n</root>",
+  csv: "name,version\nFnStack,0.1.0",
 };
 
 export function ConvertersTool() {

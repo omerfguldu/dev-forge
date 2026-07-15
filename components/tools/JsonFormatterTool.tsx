@@ -23,7 +23,7 @@ const CodeEditor = dynamic(
 );
 
 const SAMPLE_JSON = `{
-  "name": "DevForge",
+  "name": "FnStack",
   "tools": ["json", "yaml", "xml", "csv"],
   "active": true
 }`;

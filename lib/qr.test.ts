@@ -3,7 +3,7 @@ import { generateQrPngDataUrl, generateQrSvg } from "./qr";
 
 describe("generateQrSvg", () => {
   it("produces an SVG document containing the viewBox and svg tags", async () => {
-    const svg = await generateQrSvg("https://devforge.dev");
+    const svg = await generateQrSvg("https://fnstack.vercel.app");
     expect(svg).toContain("<svg");
     expect(svg).toContain("viewBox");
   });
@@ -19,7 +19,7 @@ describe("generateQrSvg", () => {
 
 describe("generateQrPngDataUrl", () => {
   it("produces a PNG data URL", async () => {
-    const dataUrl = await generateQrPngDataUrl("https://devforge.dev");
+    const dataUrl = await generateQrPngDataUrl("https://fnstack.vercel.app");
     expect(dataUrl.startsWith("data:image/png;base64,")).toBe(true);
   });
 });

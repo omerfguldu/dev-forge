@@ -12,7 +12,7 @@ test("shows added and removed line counts for the default sample texts", async (
     has: page.locator('[aria-label="Orijinal metin"]'),
   });
   await expect(original.locator(".view-lines")).toContainText(
-    "DevForge geliştirici araçları",
+    "FnStack geliştirici araçları",
   );
 });
 

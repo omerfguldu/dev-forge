@@ -33,7 +33,7 @@ describe("JSON <-> YAML", () => {
   });
 
   it("round-trips an object through YAML", () => {
-    const original = { name: "DevForge", tools: 5 };
+    const original = { name: "FnStack", tools: 5 };
     const toYaml = jsonToYaml(JSON.stringify(original));
     const backToJson = yamlToJson(toYaml.data as string);
     expect(JSON.parse(backToJson.data as string)).toEqual(original);

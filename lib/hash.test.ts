@@ -20,8 +20,8 @@ describe("computeHash", () => {
   });
 
   it("produces a different digest per algorithm for the same input", () => {
-    const md5 = computeHash("DevForge", "MD5");
-    const sha256 = computeHash("DevForge", "SHA-256");
+    const md5 = computeHash("FnStack", "MD5");
+    const sha256 = computeHash("FnStack", "SHA-256");
     expect(md5).not.toBe(sha256);
     expect(md5).toHaveLength(32);
     expect(sha256).toHaveLength(64);
