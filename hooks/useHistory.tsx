@@ -13,7 +13,7 @@ const HistoryContext = createContext<HistoryContextValue | null>(null);
 
 export function HistoryProvider({ children }: { children: React.ReactNode }) {
   const [history, setHistory] = useLocalStorage<HistoryEntry[]>(
-    "devforge-history",
+    "devstack-history",
     [],
   );
 

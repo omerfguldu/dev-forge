@@ -31,6 +31,7 @@ export function CmdPalette({ open, onOpenChange }: CmdPaletteProps) {
       onOpenChange={onOpenChange}
       title="Komut Paleti"
       description="Bir araç aramak için yazın"
+      className="sm:max-w-xl md:max-w-2xl"
     >
       <Command>
         <CommandInput placeholder="Bir araç yazın..." />

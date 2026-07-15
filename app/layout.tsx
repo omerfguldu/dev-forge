@@ -4,6 +4,7 @@ import { Analytics } from "@/components/Analytics";
 import { AppShell } from "@/components/AppShell";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { ThemeProvider } from "@/components/theme-provider";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import { SITE_URL } from "@/lib/site";
 import "../styles/globals.css";
 
@@ -20,8 +21,8 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "DevForge — Developer Utility Suite",
-    template: "%s · DevForge",
+    default: "DevStack — Developer Utility Suite",
+    template: "%s · DevStack",
   },
   description:
     "JSON formatlama, kod dönüştürme, metin şifreleme ve veri üretimi gibi geliştirici araçlarını tek bir hızlı ve güvenli arayüzde toplayan, tamamen istemci taraflı çalışan araç seti.",
@@ -46,13 +47,15 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${manrope.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="h-full">
+      <body className="h-full bg-app-decor">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
         >
-          <AppShell>{children}</AppShell>
+          <LanguageProvider>
+            <AppShell>{children}</AppShell>
+          </LanguageProvider>
         </ThemeProvider>
         <ServiceWorkerRegistration />
         <Analytics />

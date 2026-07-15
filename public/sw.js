@@ -13,7 +13,7 @@
 // list here is small and fixed, so its documents are precached explicitly
 // at install to make a later hard reload/offline visit work regardless of
 // how the route was first reached.
-const CACHE_NAME = "devforge-v1";
+const CACHE_NAME = "devstack-v1";
 const PRECACHE_ROUTES = [
   "/",
   "/json-formatter",

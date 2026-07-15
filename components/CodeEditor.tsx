@@ -81,7 +81,7 @@ export function CodeEditor({
 
     monaco.editor.setModelMarkers(
       model,
-      "devforge",
+      "devstack",
       markers.map((marker) => ({
         ...marker,
         severity: monaco.MarkerSeverity.Error,
