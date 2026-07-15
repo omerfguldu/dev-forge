@@ -26,6 +26,9 @@ export const metadata: Metadata = {
   description:
     "JSON formatlama, kod dönüştürme, metin şifreleme ve veri üretimi gibi geliştirici araçlarını tek bir hızlı ve güvenli arayüzde toplayan, tamamen istemci taraflı çalışan araç seti.",
   manifest: "/manifest.json",
+  verification: {
+    google: "Ch7amv6GZ3vGgshGxSsQiQCpMx5iqJ0VxXOa30TSTHk",
+  },
 };
 
 export const viewport: Viewport = {
